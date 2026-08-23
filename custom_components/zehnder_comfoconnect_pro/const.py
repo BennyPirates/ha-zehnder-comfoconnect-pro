@@ -1,7 +1,7 @@
 """Constants and documented local Modbus map."""
 
 DOMAIN = "zehnder_comfoconnect_pro"
-PLATFORMS = ["sensor", "binary_sensor", "fan", "select"]
+PLATFORMS = ["sensor", "binary_sensor", "fan", "select", "button"]
 DEFAULT_PORT = 502
 DEFAULT_UNIT_ID = 1
 DEFAULT_SCAN_INTERVAL = 10
