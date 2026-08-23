@@ -1,0 +1,1 @@
+{"domain":"zehnder_comfoconnect_pro","name":"Zehnder ComfoConnect Pro","codeowners":["@BennyPirates"],"config_flow":true,"iot_class":"local_polling","requirements":["pymodbus==3.13.1"],"version":"0.1.0"}
