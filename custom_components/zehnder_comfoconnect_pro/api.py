@@ -21,16 +21,40 @@ class ComfoClient:
     def close(self):
         self.client.close()
 
+    def _request(self, operation, *, require_registers=False):
+        """Run one Modbus request and recover once from a stale TCP session."""
+        last_error = None
+
+        for _attempt in range(2):
+            try:
+                if not self.client.connected and not self.client.connect():
+                    raise ComfoError("Could not connect to Zehnder")
+
+                response = operation()
+                if response is None or response.isError():
+                    raise ComfoError(str(response))
+                if require_registers and not getattr(response, "registers", None):
+                    raise ComfoError("Zehnder returned no registers")
+                return response
+            except (ComfoError, ModbusException, OSError) as error:
+                last_error = error
+                # pymodbus can keep reporting a stale TCP connection after the
+                # gateway was power-cycled. Closing it forces connect() to
+                # create a fresh socket on the retry or next coordinator poll.
+                self.client.close()
+
+        raise ComfoError(str(last_error) or "Zehnder request failed") from last_error
+
     def _read(self, address, input_register):
-        if not self.client.connected and not self.client.connect():
-            raise ComfoError("Could not connect to Zehnder")
-        response = (
+        method = (
             self.client.read_input_registers
             if input_register
             else self.client.read_holding_registers
-        )(address=address, count=1, device_id=self.unit_id)
-        if response.isError() or not response.registers:
-            raise ComfoError(str(response))
+        )
+        response = self._request(
+            lambda: method(address=address, count=1, device_id=self.unit_id),
+            require_registers=True,
+        )
         return int(response.registers[0])
 
     def read_all(self):
@@ -49,11 +73,8 @@ class ComfoClient:
         self._write(1, profile)
 
     def _write(self, address, value):
-        try:
-            response = self.client.write_register(
+        self._request(
+            lambda: self.client.write_register(
                 address=address, value=value, device_id=self.unit_id
             )
-        except (ModbusException, OSError) as error:
-            raise ComfoError(str(error)) from error
-        if response.isError():
-            raise ComfoError(str(response))
+        )
