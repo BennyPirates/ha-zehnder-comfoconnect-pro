@@ -1,1 +1,43 @@
-{"config":{"step":{"user":{"data":{"host":"Host","port":"Port","unit_id":"Unit ID"}}}},"entity":{"fan":{"ventilation":{"name":"Ventilation"}},"select":{"temperature_profile":{"name":"Temperature profile"}},"button":{"set_away":{"name":"Set Away"},"set_low":{"name":"Set Low"},"set_normal":{"name":"Set Normal"},"set_high":{"name":"Set High"},"set_boost":{"name":"Set Boost"}},"sensor":{"extract_air_temperature":{"name":"Extract air temperature"},"extract_air_humidity":{"name":"Extract air humidity"},"exhaust_air_temperature":{"name":"Exhaust air temperature"},"exhaust_air_humidity":{"name":"Exhaust air humidity"},"outdoor_air_temperature":{"name":"Outdoor air temperature"},"outdoor_air_humidity":{"name":"Outdoor air humidity"},"supply_air_temperature":{"name":"Supply air temperature"},"supply_air_humidity":{"name":"Supply air humidity"},"air_volume":{"name":"Air volume"},"ventilation_level":{"name":"Ventilation level"},"ventilation_mode":{"name":"Ventilation mode"},"remaining_boost_time":{"name":"Remaining boost time"},"temperature_profile":{"name":"Temperature profile code"},"comfort_temperature_setpoint":{"name":"Comfort temperature setpoint"}},"binary_sensor":{"boost_active":{"name":"Boost active"},"away_active":{"name":"Away active"}}}}
+{
+  "config": {"step": {"user": {"data": {"host": "Host", "port": "Port", "unit_id": "Unit ID"}}}},
+  "entity": {
+    "fan": {"ventilation": {"name": "Ventilation"}},
+    "select": {"temperature_profile": {"name": "Temperature profile"}},
+    "button": {
+      "set_away": {"name": "Set Away"}, "set_low": {"name": "Set Low"},
+      "set_normal": {"name": "Set Normal"}, "set_high": {"name": "Set High"},
+      "set_boost": {"name": "Set Boost"}, "reset_errors": {"name": "Acknowledge errors"}
+    },
+    "sensor": {
+      "connection_state": {"name": "Connection state"},
+      "active_error_1": {"name": "Active error 1"}, "active_error_2": {"name": "Active error 2"},
+      "active_error_3": {"name": "Active error 3"}, "active_error_4": {"name": "Active error 4"},
+      "active_error_5": {"name": "Active error 5"},
+      "room_air_temperature": {"name": "Room air temperature"}, "room_air_humidity": {"name": "Room air humidity"},
+      "extract_air_temperature": {"name": "Extract air temperature"}, "extract_air_humidity": {"name": "Extract air humidity"},
+      "exhaust_air_temperature": {"name": "Exhaust air temperature"}, "exhaust_air_humidity": {"name": "Exhaust air humidity"},
+      "outdoor_air_temperature": {"name": "Outdoor air temperature"}, "outdoor_air_humidity": {"name": "Outdoor air humidity"},
+      "supply_air_temperature": {"name": "Supply air temperature"}, "supply_air_humidity": {"name": "Supply air humidity"},
+      "air_volume": {"name": "Air volume"},
+      "co2_zone_1": {"name": "CO₂ zone 1"}, "co2_zone_2": {"name": "CO₂ zone 2"},
+      "co2_zone_3": {"name": "CO₂ zone 3"}, "co2_zone_4": {"name": "CO₂ zone 4"},
+      "co2_zone_5": {"name": "CO₂ zone 5"}, "co2_zone_6": {"name": "CO₂ zone 6"},
+      "co2_zone_7": {"name": "CO₂ zone 7"}, "co2_zone_8": {"name": "CO₂ zone 8"},
+      "filter_days_remaining": {"name": "Filter days remaining"},
+      "ventilation_level": {"name": "Ventilation level"}, "ventilation_mode": {"name": "Ventilation mode"},
+      "remaining_boost_time": {"name": "Party timer duration"},
+      "temperature_profile": {"name": "Temperature profile code"},
+      "temperature_profile_mode": {"name": "Temperature profile mode"},
+      "comfort_temperature_setpoint": {"name": "Comfort temperature setpoint"}
+    },
+    "binary_sensor": {
+      "error_active": {"name": "Error active"}, "standby_active": {"name": "Standby active"},
+      "comfohood_active": {"name": "ComfoHood active"},
+      "filter_replacement_required": {"name": "Filter replacement required"},
+      "preset_away_active": {"name": "Away preset active"}, "preset_1_active": {"name": "Preset 1 active"},
+      "preset_2_active": {"name": "Preset 2 active"}, "preset_3_active": {"name": "Preset 3 active"},
+      "auto_mode_active": {"name": "Auto mode active"}, "boost_active": {"name": "Boost active"},
+      "away_active": {"name": "Away active"}, "comfocool_active": {"name": "ComfoCool active"}
+    }
+  }
+}
