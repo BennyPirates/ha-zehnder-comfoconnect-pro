@@ -1,34 +1,36 @@
+"""Binary status entities for documented discrete inputs and coils."""
+
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .const import COILS, DISCRETE_INPUTS
+
 
 async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(
-        [
-            ComfoBinary(entry.runtime_data, entry, "boost_active", "running"),
-            ComfoBinary(entry.runtime_data, entry, "away_active", "occupancy"),
-        ]
+        ComfoBinary(entry.runtime_data, entry, key, definition)
+        for key, definition in (DISCRETE_INPUTS | COILS).items()
     )
 
 
 class ComfoBinary(CoordinatorEntity, BinarySensorEntity):
-    def __init__(self, coordinator, entry, key, device_class):
+    def __init__(self, coordinator, entry, key, definition):
         super().__init__(coordinator)
+        address, device_class, icon = definition
         self.key = key
         self._attr_unique_id = f"{entry.entry_id}_{key}"
         self.entity_description = BinarySensorEntityDescription(
-            key=key, translation_key=key, device_class=device_class
+            key=key, translation_key=key, device_class=device_class, icon=icon
         )
+        self._attr_extra_state_attributes = {
+            "register": address,
+            "register_type": "discrete_input" if key in DISCRETE_INPUTS else "coil",
+            "read_only": key in DISCRETE_INPUTS,
+        }
 
     @property
     def is_on(self):
-        data = self.coordinator.data
-        return (
-            data.get("ventilation_level") == 3
-            and data.get("remaining_boost_time", 0) > 0
-            if self.key == "boost_active"
-            else data.get("ventilation_level") == 0
-        )
+        return self.coordinator.data.get(self.key)

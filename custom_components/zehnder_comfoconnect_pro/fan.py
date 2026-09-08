@@ -25,7 +25,7 @@ class ComfoFan(CoordinatorEntity, FanEntity):
     @property
     def percentage(self):
         data = self.coordinator.data
-        if data.get("remaining_boost_time", 0) > 0:
+        if data.get("boost_active", False):
             return 100
         return min(data.get("ventilation_level", 0) * 33, 99)
 

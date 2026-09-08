@@ -27,3 +27,7 @@ class ComfoCoordinator(DataUpdateCoordinator):
     async def write_profile(self, profile):
         await self.hass.async_add_executor_job(self.client.write_profile, profile)
         await self.async_request_refresh()
+
+    async def reset_errors(self):
+        await self.hass.async_add_executor_job(self.client.reset_errors)
+        await self.async_request_refresh()

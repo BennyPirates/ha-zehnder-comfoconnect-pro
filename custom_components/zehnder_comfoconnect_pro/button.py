@@ -14,10 +14,12 @@ PRESETS: tuple[tuple[str, int, bool, str], ...] = (
 
 async def async_setup_entry(hass, entry, async_add_entities) -> None:
     """Set up the documented ventilation presets."""
-    async_add_entities(
+    entities = [
         ComfoPresetButton(entry.runtime_data, entry, key, level, boost, icon)
         for key, level, boost, icon in PRESETS
-    )
+    ]
+    entities.append(ComfoResetErrorsButton(entry.runtime_data, entry))
+    async_add_entities(entities)
 
 
 class ComfoPresetButton(CoordinatorEntity, ButtonEntity):
@@ -34,3 +36,17 @@ class ComfoPresetButton(CoordinatorEntity, ButtonEntity):
     async def async_press(self) -> None:
         """Apply the selected level and clear/set the 600-second boost timer."""
         await self.coordinator.write_level(self._level, self._boost)
+
+
+class ComfoResetErrorsButton(CoordinatorEntity, ButtonEntity):
+    """Acknowledge active faults through the self-resetting coil."""
+
+    _attr_translation_key = "reset_errors"
+    _attr_icon = "mdi:alert-remove-outline"
+
+    def __init__(self, coordinator, entry) -> None:
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{entry.entry_id}_reset_errors"
+
+    async def async_press(self) -> None:
+        await self.coordinator.reset_errors()
